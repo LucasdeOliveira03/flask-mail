@@ -80,10 +80,10 @@ def processar():
         # Inserir no prompt
         texto_prompt = prompt.replace("{text}", texto_limpo)
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=texto_prompt
-        )
+        # response = client.models.generate_content(
+        #     model="gemini-2.5-flash",
+        #     contents=texto_prompt
+        # )
 
     elif file and not texto:
         filename = file.filename
@@ -106,22 +106,22 @@ def processar():
 
         conteudo_prompt = prompt.replace("{text}", conteudo_limpo)
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=conteudo_prompt
-        )
+        # response = client.models.generate_content(
+        #     model="gemini-2.5-flash",
+        #     contents=conteudo_prompt
+        # )
 
     else:
         return jsonify({"error": "Envie um texto OU um arquivo."}), 400
 
     # Limpeza da resposta
-    response_limpo = response.text.replace("```json", "").replace("```", "").strip()
-    response_data = json.loads(response_limpo)
+    # response_limpo = response.text.replace("```json", "").replace("```", "").strip()
+    # response_data = json.loads(response_limpo)
 
-    return jsonify({
-        "categoria": response_data.get("categoria"),
-        "resposta_sugerida": response_data.get("resposta_sugerida")
-    })
+    # return jsonify({
+    #     "categoria": response_data.get("categoria"),
+    #     "resposta_sugerida": response_data.get("resposta_sugerida")
+    # })
 
 if __name__ == '__main__':
     app.run(debug=True)
