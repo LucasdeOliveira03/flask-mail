@@ -3,6 +3,7 @@ from flask import Flask, render_template,request,jsonify
 from PyPDF2 import PdfReader
 
 import nltk
+nltk.data.path.append("./nltk_data")
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -14,10 +15,6 @@ import json
 import time
 
 import os
-
-nltk.download('stopwords')
-nltk.download('punkt_tab')
-nltk.download('wordnet')
 
 app = Flask(__name__)
 
@@ -96,7 +93,7 @@ def processar():
             for page in reader.pages:
                 conteudo += page.extract_text() or ""
 
-        stop_words = set(stopwords.words("english"))
+        stop_words = set(stopwords.words("portuguese"))
         tokens = word_tokenize(conteudo.lower())
         conteudo = [word for word in tokens if word not in stop_words]
 
@@ -122,6 +119,12 @@ def processar():
     #     "categoria": response_data.get("categoria"),
     #     "resposta_sugerida": response_data.get("resposta_sugerida")
     # })
+
+    return jsonify({
+        "categoria": "Teste categoria",
+        "resposta_sugerida": "Teste Resposta"
+    })
+
 
 if __name__ == '__main__':
     app.run(debug=True)
