@@ -22,11 +22,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-# Configuração
+# Configuração de chave
 API_KEY = os.getenv("API_KEY")
 client = genai.Client(api_key=API_KEY)
 
-# Rate limit simples em memória
 rate_limit_cache = {}
 
 prompt = """Você é um assistente chamado Jeff analisando emails e sua tarefa é:
@@ -52,6 +51,7 @@ prompt = """Você é um assistente chamado Jeff analisando emails e sua tarefa �
 
 @app.route("/processar", methods=["POST"])
 def processar():
+    # Limitar requests
     ip = request.remote_addr
     key = f"rate-limit-{ip}"
     last_request = rate_limit_cache.get(key)
@@ -66,7 +66,7 @@ def processar():
 
     if texto and not file:
         # Pré-processamento com NLTK
-        stop_words = set(stopwords.words("english"))
+        stop_words = set(stopwords.words("portuguese"))
         tokens = word_tokenize(texto.lower())
         texto = [word for word in tokens if word not in stop_words]
 
@@ -93,6 +93,7 @@ def processar():
             for page in reader.pages:
                 conteudo += page.extract_text() or ""
 
+        # Pré-processamento com NLTK
         stop_words = set(stopwords.words("portuguese"))
         tokens = word_tokenize(conteudo.lower())
         conteudo = [word for word in tokens if word not in stop_words]
@@ -101,15 +102,13 @@ def processar():
         conteudo = [lemmatizer.lemmatize(t) for t in conteudo]
         conteudo_limpo = " ".join(conteudo)
 
+        # Inserir no prompt
         conteudo_prompt = prompt.replace("{text}", conteudo_limpo)
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=conteudo_prompt
         )
-
-    else:
-        return jsonify({"error": "Envie um texto OU um arquivo."}), 400
 
     # Limpeza da resposta
     response_limpo = response.text.replace("```json", "").replace("```", "").strip()

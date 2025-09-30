@@ -7,9 +7,13 @@
 <body>
     <div class="home">
         <div class= "header">
-            <h1>MailSorter</h1>
+            <h1 style="margin-bottom: 5px;">Jeff</h1>
+            <h1 style="margin-top: 5px;">Seu assistente de email</h1>
+            <h2>Classifique emails e receba respostas automáticas em segundos</h2>
         </div>
 
+        <h4>Digite um texto ou envie um arquivo do email</h4>
+        
         <form class = "content" id="mailForm" action="/processar" enctype="multipart/form-data" method="post">
             <div class="file-upload">
                 <input type="file" name="arquivo" id="arquivo" accept=".pdf,.txt">
@@ -19,6 +23,7 @@
 
             <textarea name="texto" id="texto" rows="3" cols="30" placeholder="Escreva o email enviado"></textarea>
             <button class= "botao"type="submit">Enviar</button>
+            <p id="alert" style="color: #fb0000;background: #f0f3f900;margin: 0;padding: 0;font-weight: 500;"></p>
         </form>
 
         <div class= "resposta">
@@ -52,21 +57,22 @@
             event.preventDefault();
 
             if (document.getElementById("texto").value === "" && document.getElementById("arquivo").value === "") {
-            window.alert("Escolha um metodo de envio") 
+            document.getElementById('alert').textContent = "Escolha um metodo de envio";
             return;
             }
 
             if (!(document.getElementById("texto").value === "") && !(document.getElementById("arquivo").value === "")) {
-            window.alert("Escolha apenas um metodo de envio") 
+            document.getElementById('alert').textContent = "Escolha apenas um metodo de envio";
             return;
 
             }
+            document.getElementById('alert').textContent = "";
             document.getElementById('copia').textContent = "Copiar resposta";
 
             let button = this.querySelector("button[type=submit]");
             button.disabled = true;
             button.style.backgroundColor = 'rgb(238 88 88)'
-            button.textContent = "Enviando...";
+            button.textContent = "Processando...";
 
 
             let formData = new FormData(this);
@@ -84,7 +90,7 @@
             .catch(error => console.error("Erro:", error))
             .finally(() => {
             button.disabled = false;     
-            button.style.backgroundColor = '#a262e2'
+            button.style.removeProperty("background-color");
             button.textContent = "Enviar"; 
             });
         });
