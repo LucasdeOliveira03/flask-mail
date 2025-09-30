@@ -1,3 +1,128 @@
-h1{
-    background-color: aqua;
+body {
+    font-family: "Segoe UI", Roboto, sans-serif;
+    background: #f5f7fa;
+    color: #555;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+body > div, form {
+    background: white;
+    padding: 20px 25px;
+    margin: 20px;
+    border-radius: 12px;
+    width: 400px;
+}
+
+h1 {
+    color: #a262e2;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input[type="file"], textarea {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.95rem;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: sans-serif;
+}
+
+Button {
+    background: #a262e2;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    font-family: sans-serif;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+Button:hover {
+    background: #7646a7;
+}
+
+div h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+div p {
+    background: #f0f3f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #222;
+}
+
+.header {
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-family: sans-serif;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.resposta {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    width: 100%;
+}
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload label {
+    background: #a262e2;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    font-size: 13.3px;
+    font-family: sans-serif;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.file-upload label:hover {
+    background-color: #7646a7;
+}
+
+#file-name {
+    color: #555;
 }

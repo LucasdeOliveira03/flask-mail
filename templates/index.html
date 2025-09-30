@@ -1,13 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Flask App</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <title>MailSorter</title>
+    <link rel="stylesheet" type='text/css' href="static/css/style.css">
 </head>
 <body>
-    <h1>Hello from Flask!</h1>
-    <p>This is a paragraph with some styling.</p>
+    <div class="home">
+        <div class= "header">
+            <h1>MailSorter</h1>
+        </div>
+
+        <form class = "content" id="mailForm" action="/processar" enctype="multipart/form-data" method="post">
+            <div class="file-upload">
+                <input type="file" name="arquivo" id="arquivo" accept=".pdf,.txt">
+                <label for="arquivo">Escolher arquivo</label>
+                <span id="file-name">Nenhum arquivo escolhido</span>
+            </div>
+
+            <textarea name="texto" id="texto" rows="3" cols="30" placeholder="Escreva o email enviado"></textarea>
+            <button class= "botao"type="submit">Enviar</button>
+        </form>
+
+        <div class= "resposta">
+            <h2>Resposta sugerida</h2>
+            <p id="ai_response"></p>
+            <button id= "copia" style="width: 40%;"class= "botao" onclick="copiar()">Copiar resposta</button>
+            
+        </div>
+
+        <div class= "resposta">
+            <h2>Categoria</h2>
+            <p id="ai_categorization"></p>
+        </div>
+
+    </div>
+
+    <script>
+        function copiar() {
+            var copyText = document.getElementById('ai_response');
+
+            navigator.clipboard.writeText(copyText.innerText);
+            document.getElementById('copia').textContent = "Resposta copiada";
+        }
+        
+        document.getElementById("arquivo").addEventListener("change", function() {
+            let fileName = this.files.length > 0 ? this.files[0].name : "Nenhum arquivo escolhido";
+            document.getElementById("file-name").textContent = fileName;
+        });
+
+        document.getElementById("mailForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            if (document.getElementById("texto").value === "" && document.getElementById("arquivo").value === "") {
+            window.alert("Escolha um metodo de envio") 
+            return;
+            }
+
+            if (!(document.getElementById("texto").value === "") && !(document.getElementById("arquivo").value === "")) {
+            window.alert("Escolha apenas um metodo de envio") 
+            return;
+
+            }
+            document.getElementById('copia').textContent = "Copiar resposta";
+
+            let button = this.querySelector("button[type=submit]");
+            button.disabled = true;
+            button.style.backgroundColor = 'rgb(238 88 88)'
+            button.textContent = "Enviando...";
+
+
+            let formData = new FormData(this);
+
+            fetch(this.action, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("ai_response").textContent = data.resposta_sugerida;
+                document.getElementById("ai_categorization").textContent = data.categoria;
+            })
+            
+            .catch(error => console.error("Erro:", error))
+            .finally(() => {
+            button.disabled = false;     
+            button.style.backgroundColor = '#a262e2'
+            button.textContent = "Enviar"; 
+            });
+        });
+    </script>
 </body>
 </html>
