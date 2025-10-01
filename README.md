@@ -1,28 +1,66 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+<div align="center">
+  <h1>flask-mail</h1>
+  <h3>flask-mail(Jeff), o assistente em Flask que utiliza Google Gemini e NLP (NLTK) para analisar emails</h3>
+</div>
 
-# Flask + Vercel
 
-This example shows how to use Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+<p align="center">
+  <a href="#technologies">Technologies</a> &#xa0; | &#xa0;
+  <a href="#starting">Starting</a> &#xa0; | &#xa0;
+  <a href="#environment-variables">Environment Variables</a> &#xa0; 
+</p>
 
-## Demo
+## Technologies ##
 
-https://flask-python-template.vercel.app/
+<a href="https://www.python.org">
+  <img width="50" title="Python" alt="Python Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png">
+</a> &#xa0; &#xa0;
 
-## How it Works
+<a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjJzcHlroGQAxVYmZUCHd1SHv0QFnoECB4QAQ&url=https%3A%2F%2Faistudio.google.com%2F&usg=AOvVaw2ado6WVRi8CYsaHcreSChK&opi=89978449">
+  <img width="50" title="Ai Studio" alt="Ai Studio Logo" src="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/aistudio.png">
+</a> &#xa0; &#xa0;
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+<a href="https://flask.palletsprojects.com/en/stable">
+  <img width="50" title="Flask" alt="Flask Logo" src="https://cdn.freebiesupply.com/logos/large/2x/flask-logo-png-transparent.png">
+</a> &#xa0; &#xa0;
 
-## Running Locally
+<a href="https://www.nltk.org">
+  <img width="50" title="nltk" alt="nltk Logo" src="https://miro.medium.com/1*YM2HXc7f4v02pZBEO8h-qw.png">
+</a> &#xa0; &#xa0;
+
+## Starting ##
+
+Clonar o projeto
 
 ```bash
-npm i -g vercel
-vercel dev
+  git clone https://github.com/LucasdeOliveira03/flask-mail.git
 ```
 
-Your Flask application is now available at `http://localhost:3000`.
+Vá até o diretorio
 
-## One-Click Deploy
+```bash
+  cd flask-mail
+```
+Criar um Virtual Environment
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+```bash
+  python -m venv venv
+```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+Instalar dependencias
+
+```bash
+  pip install -r .\requirements.txt
+```
+
+Startar o serviço
+
+```bash
+  python index.py
+```
+## Environment Variables ##
+
+Para rodar esse projeto, você precisa adicionar a variavel `API_KEY` do Gemini nos seus arquivos e provedor
+
+
+<a href="#top">Back to top</a>
