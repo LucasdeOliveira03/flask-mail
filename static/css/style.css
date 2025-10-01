@@ -73,10 +73,6 @@ div h4 {
     font-size: 0.9rem;
     margin-bottom: 2px;
     color: #555;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 5px;
-    box-shadow: 3px 2px 10px rgba(0, 0, 0, 0.1);
     margin-right: 75px;
 }
 
@@ -120,6 +116,9 @@ div p {
 .file-upload input[type="file"] {
     display: none;
 }
+.file-upload input[type="button"] {
+    display: none;
+}
 
 .file-upload label {
     background: #a262e2;
@@ -141,4 +140,24 @@ div p {
 
 #file-name {
     color: #555;
+}
+.remove{
+    width: 15%; 
+}
+
+@media (max-width: 600px){
+    body > div, form {
+    background: white;
+    padding: 20px 25px;
+    margin: 20px;
+    border-radius: 12px;
+    width: 80vw;
+    }
+
+    div h4 {
+    font-size: 1rem;
+    margin-bottom: 0px;
+    color: #555;
+    margin-right: 75px;
+    }
 }

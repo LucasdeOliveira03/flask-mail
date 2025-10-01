@@ -3,13 +3,14 @@
 <head>
     <title>MailSorter</title>
     <link rel="stylesheet" type='text/css' href="static/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="home">
         <div class= "header">
             <h1 style="margin-top: 5px; margin-bottom: 5px;">Jeff</h1>
             <h1 style="margin-top: 5px; margin-bottom: 5px;">Seu assistente de email</h1>
-            <h2>Classifique emails e receba respostas automáticas em segundos</h2>
+            <h2>Classifique e-mails e receba sugestões de respostas em segundos</h2>
         </div>
 
         <h4>Digite um texto ou envie um arquivo do email</h4>
@@ -17,25 +18,27 @@
         <form class = "content" id="mailForm" action="/processar" enctype="multipart/form-data" method="post">
             <div class="file-upload">
                 <input type="file" name="arquivo" id="arquivo" accept=".pdf,.txt">
-                <label for="arquivo">Escolher arquivo</label>
-                <span id="file-name">Nenhum arquivo escolhido</span>
+                <label for="arquivo">Selecionar arquivo</label>
+                <span id="file-name">Nenhum arquivo selecionado</span>
+                <input type="button" id= "remove" name= "remove" onclick="remove_arquivo()">
+                <label class= "remove"for="remove"style="background: #EE5858">Remover arquivo</label>
+                
             </div>
 
             <textarea name="texto" id="texto" rows="3" cols="30" placeholder="Escreva o email enviado"></textarea>
             <button class= "botao"type="submit">Enviar</button>
-            <p id="alert" style="color: #fb0000;background: #f0f3f900;margin: 0;padding: 0;font-weight: 500;"></p>
+            <p id="alert" style="color: #fb0000; background: #f0f3f900; margin: 0; padding: 0; font-weight: 500;"></p>
         </form>
-
-        <div class= "resposta">
-            <h2>Resposta sugerida</h2>
-            <p id="ai_response"></p>
-            <button id= "copia" style="width: 40%;"class= "botao" onclick="copiar()">Copiar resposta</button>
-            
-        </div>
 
         <div class= "resposta">
             <h2>Categoria</h2>
             <p id="ai_categorization"></p>
+        </div>
+        <div class= "resposta">
+            <h2>Resposta sugerida</h2>
+            <p id="ai_response"></p>
+            <button id= "copia" style="width: 40%;"class= "botao" onclick="copiar()">Copiar sugestão</button>
+            
         </div>
 
     </div>
@@ -45,11 +48,18 @@
             var copyText = document.getElementById('ai_response');
 
             navigator.clipboard.writeText(copyText.innerText);
-            document.getElementById('copia').textContent = "Resposta copiada";
+            document.getElementById('copia').textContent = "Sugestão copiada";
+            document.getElementById('copia').style.backgroundColor = '#75e977'
+        }
+        function remove_arquivo() {
+            var arquivo = document.getElementById('arquivo');
+            arquivo.value = "";
+            document.getElementById("file-name").textContent = "Nenhum arquivo selecionado";
+            return
         }
         
         document.getElementById("arquivo").addEventListener("change", function() {
-            let fileName = this.files.length > 0 ? this.files[0].name : "Nenhum arquivo escolhido";
+            let fileName = this.files.length > 0 ? this.files[0].name : "Nenhum arquivo selecionado";
             document.getElementById("file-name").textContent = fileName;
         });
 
@@ -57,21 +67,21 @@
             event.preventDefault();
 
             if (document.getElementById("texto").value === "" && document.getElementById("arquivo").value === "") {
-            document.getElementById('alert').textContent = "Escolha um metodo de envio";
+            document.getElementById('alert').textContent = "Escolha um método de envio";
             return;
             }
 
             if (!(document.getElementById("texto").value === "") && !(document.getElementById("arquivo").value === "")) {
-            document.getElementById('alert').textContent = "Escolha apenas um metodo de envio";
+            document.getElementById('alert').textContent = "Escolha apenas um método de envio";
             return;
 
             }
             document.getElementById('alert').textContent = "";
-            document.getElementById('copia').textContent = "Copiar resposta";
+            document.getElementById('copia').textContent = "Copiar sugestão";
 
             let button = this.querySelector("button[type=submit]");
             button.disabled = true;
-            button.style.backgroundColor = 'rgb(238 88 88)'
+            button.style.backgroundColor = '#EE5858'
             button.textContent = "Processando...";
 
 
@@ -91,6 +101,7 @@
             .finally(() => {
             button.disabled = false;     
             button.style.removeProperty("background-color");
+            document.getElementById('copia').style.removeProperty("background-color")
             button.textContent = "Enviar"; 
             });
         });
