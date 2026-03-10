@@ -50,6 +50,32 @@ prompt = """Você é um assistente chamado Jeff analisando emails e sua tarefa �
     }
     """
 
+def analise(conteudo):
+    # Pré-processamento com NLTK
+    stop_words = set(stopwords.words("portuguese"))
+    tokens = word_tokenize(conteudo.lower())
+    conteudo = [word for word in tokens if word not in stop_words]
+
+    lemmatizer = WordNetLemmatizer()
+    conteudo = [lemmatizer.lemmatize(t) for t in conteudo]
+    conteudo_limpo = " ".join(conteudo)
+
+    # Inserir no prompt
+    conteudo_prompt = prompt.replace("{text}", conteudo_limpo)
+
+    response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=conteudo_prompt
+        )
+
+    # Limpeza da resposta
+    response_limpo = response.text.replace("```json", "").replace("```", "").strip()
+    response_data = json.loads(response_limpo)
+
+    return jsonify({
+        "categoria": response_data.get("categoria"),
+        "resposta_sugerida": response_data.get("resposta_sugerida")
+    })
 
 @app.route("/processar", methods=["POST"])
 def processar():
@@ -67,59 +93,41 @@ def processar():
     texto = request.form.get("texto")
 
     if texto and not file:
-        # Pré-processamento com NLTK
-        stop_words = set(stopwords.words("portuguese"))
-        tokens = word_tokenize(texto.lower())
-        texto = [word for word in tokens if word not in stop_words]
-
-        lemmatizer = WordNetLemmatizer()
-        texto = [lemmatizer.lemmatize(t) for t in texto]
-        texto_limpo = " ".join(texto)
-
-        # Inserir no prompt
-        texto_prompt = prompt.replace("{text}", texto_limpo)
-
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=texto_prompt
-        )
+        conteudo = texto
 
     elif file and not texto:
         filename = file.filename
-        conteudo = ""
+        conteudo_extraido = ""
 
         if filename.endswith(".txt"):
-            conteudo = file.read().decode("utf-8")
+            conteudo_extraido = file.read().decode("utf-8")
         else:
             reader = PdfReader(file)
             for page in reader.pages:
-                conteudo += page.extract_text() or ""
+                conteudo_extraido += page.extract_text() or ""
 
-        # Pré-processamento com NLTK
-        stop_words = set(stopwords.words("portuguese"))
-        tokens = word_tokenize(conteudo.lower())
-        conteudo = [word for word in tokens if word not in stop_words]
+        conteudo = conteudo_extraido
 
-        lemmatizer = WordNetLemmatizer()
-        conteudo = [lemmatizer.lemmatize(t) for t in conteudo]
-        conteudo_limpo = " ".join(conteudo)
+    return(analise(conteudo))
 
-        # Inserir no prompt
-        conteudo_prompt = prompt.replace("{text}", conteudo_limpo)
+@app.route("/api/analise", methods=["POST"])
+def processar_api():
+    # Limitar requests
+    ip = request.remote_addr
+    key = f"rate-limit-{ip}"
+    last_request = rate_limit_cache.get(key)
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=conteudo_prompt
-        )
+    if last_request and time.time() - last_request < 5:
+        return jsonify({"error": "Aguarde alguns segundos antes de tentar de novo."}), 429
 
-    # Limpeza da resposta
-    response_limpo = response.text.replace("```json", "").replace("```", "").strip()
-    response_data = json.loads(response_limpo)
+    rate_limit_cache[key] = time.time()
 
-    return jsonify({
-        "categoria": response_data.get("categoria"),
-        "resposta_sugerida": response_data.get("resposta_sugerida")
-    })
+    conteudo = request.get_json()
+
+    if not conteudo or "email" not in conteudo:
+        return jsonify({"error": "Envie o campo 'email' no JSON"}), 400
+
+    return(analise(conteudo['email']))
 
 if __name__ == '__main__':
     app.run(debug=True)
