@@ -13,7 +13,7 @@
 ## Technologies ##
 
 <a href="https://www.python.org">
-  <img width="50" title="Python" alt="Python Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png">
+  <img width="50" title="Python" alt="Python Logo" src="https://logos-world.net/wp-content/uploads/2021/10/Python-Emblem.png">
 </a> &#xa0; &#xa0;
 
 <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjJzcHlroGQAxVYmZUCHd1SHv0QFnoECB4QAQ&url=https%3A%2F%2Faistudio.google.com%2F&usg=AOvVaw2ado6WVRi8CYsaHcreSChK&opi=89978449">
